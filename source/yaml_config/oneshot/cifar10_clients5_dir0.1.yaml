@@ -1,0 +1,144 @@
+exp_name: "OneShotFedAvg_test"
+dataset:
+  data_name: "CIFAR10" # choice: [CIFAR10, CIFAR100, MNIST, FMNIST]
+  root_path: "/data0/wxy_data/datasets/"
+  train_batch_size: 128
+  test_batch_size: 256
+  channels: 3
+  num_classes: 10
+  image_size: 32
+
+distribution:
+  type: "dirichlet" # choice: [iid, noniid, dirichlet]
+  label_num_per_client: 2 # non-iid parameter
+  alpha: 0.1 # dirichlet distribution parameter
+
+client:
+  num_clients: 5
+
+server:
+  num_rounds: 100
+  frac_clients: 0.1
+  lr: 0.01
+  local_epochs: 5
+  optimizer: "sgd" # choice: [sgd, adam]
+  momentum: 0.9
+  weight_decay: 0.0001
+  loss_name: "ce" # choice: [ce, mse, nll]
+  model_name: "resnet18"
+  aggregated_by_datasize: False
+  lr_decay_per_round: 0.998
+
+device: "cuda:0"
+
+checkpoint:
+  save_path: "./checkpoints/"
+  save_freq: 10
+
+
+resume: True
+resume_best: False
+seed: 1
+
+# choice: ['FedAvg', 'FedCav', 'FedProx', SCAFFOLD, 'Krum', 'Zeno', 'FedDyn', 'Moon', 'FedNova', 'FedNTD', 'FedDC', 'TrimmedMean', 'GeoMedian', 'DnC']
+# algorithms: ['FedAvg', 'FedCav', 'FedProx', SCAFFOLD, 'Krum', 'Zeno', 'FedDyn', 'Moon', 'FedNova', 'FedNTD', 'FedDC', 'TrimmedMean', 'GeoMedian', 'DnC']
+
+feddf:
+  optimizer: "sgd" # choice: [sgd, adam]
+  momentum: 0.9
+  lr: 0.01
+  server_epochs: 40
+
+fedadi:
+  bs: 128
+  lr_g: 0.25
+  distillation_epochs: 40
+  generation_epochs: 40
+  first_bn_multiplier: 10
+  adi_scale: 0.0
+  tv_l1: 0.0
+  tv_l2: 0.0001
+  r_feature: 0.05
+  l2: 0.00001
+  main_loss_factor: 1.0
+  optimizer: "sgd" # choice: [sgd, adam]
+  momentum: 0.9
+  lr: 0.01
+  distill_bs: 32
+
+feddafl:
+  lr_g: 0.02
+  lr_s: 0.1
+  server_epochs: 40
+  inter_epochs: 120
+  bs: 128
+  latent_dim: 1000
+  oh: 0.05
+  ie: 5
+  a: 0.01
+
+dense:
+  nz: 256
+  ngf: 64
+  g_steps: 30  
+  lr_g: 0.001
+  synthesis_batch_size: 128
+  batch_size: 128
+  adv: 1.0
+  bn: 1.0
+  oh: 1.0
+  his: True
+  batchonly: False
+  batchused: False
+  kd_lr: 0.01
+  weight_decay: 0.0001
+  epochs: 200
+  kd_T: 4
+
+
+coboosting:
+  nz: 256
+  ngf: 64
+  g_steps: 30
+  lr_g: 0.001
+  synthesis_batch_size: 128
+  batch_size: 128
+  adv: 1.0
+  bn: 1.0
+  oh: 1.0
+  weighted: False
+  hs: 1.0
+  wa_steps: 1
+  mu: 0.01
+  wdc: 0.99
+  his: True
+  batchonly: False
+  batchused: False
+  kd_lr: 0.01
+  weight_decay: 0.0001
+  epochs: 200
+  kd_T: 4
+  odseta: 8
+
+intactofl:
+  gating_arch: "linear"
+  topk: 1.0 # frac of the number of clients
+  nz: 256
+  ngf: 64
+  g_steps: 30
+  lr_g: 0.001
+  synthesis_batch_size: 128
+  batch_size: 128
+  adv: 1.0
+  bn: 1.0
+  oh: 1.0
+  his: True
+  batchonly: False
+  batchused: False
+  epochs: 200
+  gt_lr: 0.01
+  weight_decay: 0.0001
+  alpha: 0.01
+  beta: 1
+  odseta: 8
+  kd_T: 4

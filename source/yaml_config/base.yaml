@@ -1,0 +1,88 @@
+exp_name: "FedAvg_CIFAR10_10_test"
+dataset:
+  data_name: "CIFAR10" # choice: [CIFAR10, CIFAR100, MNIST, FMNIST]
+  root_path: "/data0/wxy_data/datasets/"
+  train_batch_size: 128
+  test_batch_size: 256
+  channels: 3
+  num_classes: 10
+
+distribution:
+  type: "dirichlet" # choice: [iid, noniid, dirichlet]
+  label_num_per_client: 2 # non-iid parameter
+  alpha: 0.1 # dirichlet distribution parameter
+
+client:
+  num_clients: 100
+
+server:
+  num_rounds: 100
+  frac_clients: 0.1
+  lr: 0.01
+  local_epochs: 1
+  optimizer: "sgd" # choice: [sgd, adam]
+  momentum: 0.9
+  weight_decay: 0.0001
+  loss_name: "ce" # choice: [ce, mse, nll]
+  model_name: "resnet18"
+  aggregated_by_datasize: True
+  lr_decay_per_round: 0.998
+
+device: "cuda:0"
+
+checkpoint:
+  save_path: "./checkpoints/"
+  save_freq: 1
+
+
+resume: False
+seed: 1
+
+# choice: ['FedAvg', 'FedCav', 'FedProx', SCAFFOLD, 'Krum', 'Zeno', 'FedDyn', 'Moon', 'FedNova', 'FedNTD', 'FedDC', 'TrimmedMean', 'GeoMedian', 'DnC']
+algorithms: ['FedAvg', 'FedCav', 'FedProx', SCAFFOLD, 'Krum', 'Zeno', 'FedDyn', 'Moon', 'FedNova', 'FedNTD', 'FedDC', 'TrimmedMean', 'GeoMedian', 'DnC']
+
+
+fedcav:
+  loss_name: "ce" # choice: [ce, mse, nll]
+
+fedprox:
+  mu: 0.1
+
+krum:
+  krum_f: 2
+  krum_m: 0.3
+
+zeno:
+  zeno_b: 0
+  zeno_rho: 0.0005
+
+feddyn:
+  feddyn_alpha: 0.1
+
+moon:
+  moon_mu: 0.001
+  moon_tau: 3
+
+fednova:
+  gmf: 0
+  mu: 0
+  dampening: 0
+  nesterov: False
+
+fedntd:
+  tau: 3
+  beta: 1
+
+feddc:
+  alpha_coef: 0.01
+
+trimmedmean:
+  num_byzantine: 2
+
+geomedian:
+  maxiter: 1000
+  eps: 1e-8
+  ftol: 1e-22
+
+DnC:
+  num_byzantine: 2

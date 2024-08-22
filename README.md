@@ -16,7 +16,17 @@
 - SVHN
 - Tiny-ImageNet
 
-#### Code upcoming soon !
+#### Usage
+
+```
+cd source
+python algo_main.py
+```
+
+- Hyperparameters can be found and modified in "source/yaml_config/oneshot/*.yaml"
+
+- Baselines have been implemented in "source/oneshot_algorithms", you can run them by commentting the lines in "algo_main.py"
+
 
 #### Citation
 
